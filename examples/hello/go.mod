@@ -2,7 +2,4 @@ module github.com/emicklei/go-restful/examples/hello
 
 go 1.14
 
-require (
-	github.com/emicklei/go-restful/v3 v3.11.0
-	github.com/json-iterator/go v1.1.12 // indirect
-)
+require github.com/emicklei/go-restful/v3 v3.12.0
