@@ -160,7 +160,19 @@ func (c CurlyRouter) computeWebserviceScore(requestTokens []string, routeTokens 
 			if len(requestTokenItem) == 0 {
 				return false, score
 			}
-			score += 1
+
+			if colon := strings.Index(routeTokenItem, ":"); colon != -1 {
+				// match by regex
+				matchesToken, matchesRemainder := c.regularMatchesPathToken(routeTokenItem, colon, routeTokenItem)
+				if matchesToken {
+					score++
+				}
+				if matchesRemainder { // TODO research
+					score--
+				}
+			}
+
+			score++
 		} else {
 			// not a parameter
 			if requestTokenItem != routeTokenItem {
