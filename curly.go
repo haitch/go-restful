@@ -46,10 +46,10 @@ func (c CurlyRouter) SelectRoute(
 // selectRoutes return a collection of Route from a WebService that matches the path tokens from the request.
 func (c CurlyRouter) selectRoutes(ws *WebService, requestTokens []string) sortableCurlyRoutes {
 	candidates := make(sortableCurlyRoutes, 0, 8)
-	for _, route := range ws.routes {
-		matches, paramCount, staticCount := c.matchesRouteByPathTokens(route.pathParts, requestTokens, route.hasCustomVerb)
+	for _, eachRoute := range ws.routes {
+		matches, paramCount, staticCount := c.matchesRouteByPathTokens(eachRoute.pathParts, requestTokens, eachRoute.hasCustomVerb)
 		if matches {
-			candidates.add(curlyRoute{route, paramCount, staticCount}) // TODO make sure Routes() return pointers?
+			candidates.add(curlyRoute{eachRoute, paramCount, staticCount}) // TODO make sure Routes() return pointers?
 		}
 	}
 	sort.Sort(candidates)
@@ -131,10 +131,10 @@ func (c CurlyRouter) detectRoute(candidateRoutes sortableCurlyRoutes, httpReques
 func (c CurlyRouter) detectWebService(requestTokens []string, webServices []*WebService) *WebService {
 	var bestWs *WebService
 	score := -1
-	for _, ws := range webServices {
-		matches, eachScore := c.computeWebserviceScore(requestTokens, ws.pathExpr.tokens)
+	for _, eachWS := range webServices {
+		matches, eachScore := c.computeWebserviceScore(requestTokens, eachWS.pathExpr.tokens)
 		if matches && (eachScore > score) {
-			bestWs = ws
+			bestWs = eachWS
 			score = eachScore
 		}
 	}
@@ -149,15 +149,15 @@ func (c CurlyRouter) computeWebserviceScore(requestTokens []string, routeTokens 
 	}
 	score := 0
 	for i := 0; i < len(routeTokens); i++ {
-		requestTokenItem := requestTokens[i]
-		routeTokenItem := routeTokens[i]
-		if len(requestTokenItem) == 0 && len(routeTokenItem) == 0 {
+		eachRequestToken := requestTokens[i]
+		eachRouteToken := routeTokens[i]
+		if len(eachRequestToken) == 0 && len(eachRouteToken) == 0 {
 			score++
 			continue
 		}
-		if len(routeTokenItem) > 0 && strings.HasPrefix(routeTokenItem, "{") {
+		if len(eachRouteToken) > 0 && strings.HasPrefix(eachRouteToken, "{") {
 			// no empty match
-			if len(requestTokenItem) == 0 {
+			if len(eachRequestToken) == 0 {
 				return false, score
 			}
 
@@ -172,7 +172,7 @@ func (c CurlyRouter) computeWebserviceScore(requestTokens []string, routeTokens 
 			score++
 		} else {
 			// not a parameter
-			if requestTokenItem != routeTokenItem {
+			if eachRequestToken != eachRouteToken {
 				return false, score
 			}
 			score += (len(routeTokens) - i) * 10 //fuzzy
