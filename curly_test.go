@@ -94,6 +94,26 @@ func Test_detectWebService(t *testing.T) {
 	}
 }
 
+func Test_detectWebServiceWithRegexPath(t *testing.T) {
+	router := CurlyRouter{}
+	holaWS := new(WebService).Path("/{:hola}")
+	helloWS := new(WebService).Path("/{:hello}")
+
+	var wss = []*WebService{holaWS, helloWS}
+
+	holaJuanInTokens := tokenizePath("/hola/juan")
+	selected := router.detectWebService(holaJuanInTokens, wss)
+	if selected != holaWS {
+		t.Fatalf("expected holaWS, got %v", selected.rootPath)
+	}
+
+	helloJuanInTokens := tokenizePath("/hello/juan")
+	selected = router.detectWebService(helloJuanInTokens, wss)
+	if selected != helloWS {
+		t.Fatalf("expected helloWS, got %v", selected.rootPath)
+	}
+}
+
 var routeMatchers = []struct {
 	route         string
 	path          string
@@ -106,7 +126,7 @@ var routeMatchers = []struct {
 	{"/a", "/a", true, 0, 1, false},
 	{"/a", "/b", false, 0, 0, false},
 	{"/a", "/b", false, 0, 0, false},
-	{"/a/{b}/c/", "/a/2/c", false, 0, 0, false},
+	{"/a/{b}/c/", "/a/2/c", true, 1, 2, false},
 	{"/{a}/{b}/{c}/", "/a/b", false, 0, 0, false},
 	{"/{x:*}", "/", false, 0, 0, false},
 	{"/{x:*}", "/a", true, 1, 0, false},
