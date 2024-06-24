@@ -5,14 +5,20 @@
 
 version: 2
 updates:
-  - package-ecosystem: gomod # See documentation for possible values
-    target-branch: v3
-    directory: / # Location of package manifests
+  - package-ecosystem: "gomod" # See documentation for possible values
+    directory: "/" # Location of package manifests
     schedule:
-      interval: weekly
+      interval: "weekly"
+    groups:
+      gomod:
+        applies-to: version-updates
+        dependency-type: production
 
   - package-ecosystem: github-actions
-    target-branch: v3
     directory: /
     schedule:
       interval: weekly
+    groups:
+      github-actions:
+        applies-to: version-updates
+        dependency-type: production
