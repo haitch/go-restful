@@ -5,11 +5,11 @@
 
 version: 2
 updates:
-  - package-ecosystem: "gomod" # See documentation for possible values
+  - package-ecosystem: gomod # See documentation for possible values
     target-branch: v3
     directory: / # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: weekly
     groups:
       gomod:
         applies-to: version-updates
