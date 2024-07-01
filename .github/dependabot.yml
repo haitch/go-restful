@@ -7,7 +7,7 @@ version: 2
 updates:
   - package-ecosystem: "gomod" # See documentation for possible values
     target-branch: v3
-    directory: /
+    directory: / # Location of package manifests
     schedule:
       interval: "weekly"
     groups:
