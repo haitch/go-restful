@@ -6,6 +6,7 @@
 version: 2
 updates:
   - package-ecosystem: "gomod" # See documentation for possible values
+    target-branch: v3
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -15,6 +16,7 @@ updates:
         dependency-type: production
 
   - package-ecosystem: github-actions
+    target-branch: v3
     directory: /
     schedule:
       interval: weekly
